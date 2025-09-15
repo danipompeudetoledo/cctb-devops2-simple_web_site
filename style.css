@@ -1,0 +1,7 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, Arial, sans-serif; background:#0f172a; color:#e2e8f0; }
+.container { max-width: 900px; margin: 40px auto; padding: 20px; }
+h1 { margin: 0 0 16px; }
+.lead { font-size: 1.1rem; margin-bottom: 20px; }
+.card { background:#111827; padding: 16px; border-radius: 12px; border:1px solid #1f2937; }
+footer { margin-top: 28px; opacity:.8; font-size:.9rem; }
