@@ -3,25 +3,35 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>DevOps Level 2 - Simple Site</title>
+  <title>My Team Registration</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main class="container">
-    <h1>DevOps Level 2 - Simple Site</h1>
-    <p class="lead">Você está vendo: <span id="host">...</span></p>
+    <h1>My Team Registration</h1>
 
-    <div class="card">
-      <h2>Status</h2>
-      <ul>
-        <li>Servidor Web ativo (Apache)</li>
-        <li>Frontend simples (HTML/CSS/JS)</li>
-        <li>Ambiente: <strong id="env">unknown</strong></li>
-      </ul>
-    </div>
+    <form id="teamForm" class="form">
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" placeholder="Jane Doe" />
+      </div>
 
-    <footer>© 2025 | CCTB DevOps L2</footer>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="jane@example.com" />
+      </div>
+
+      <div class="field">
+        <label for="role">Role</label>
+        <input id="role" name="role" type="text" placeholder="Developer / QA / PM" />
+      </div>
+
+      <p id="msg" class="msg" aria-live="polite"></p>
+
+      <button type="submit" class="btn">Register</button>
+    </form>
   </main>
+
   <script src="main.js"></script>
 </body>
 </html>
