@@ -3,8 +3,8 @@ pipeline {
 
   environment {
     REPO_URL          = 'https://github.com/danipompeudetoledo/cctb-devops2-simple_web_site.git'
-    TESTING_SERVER    = '54.87.136.54'   // IP do web-testing (sem http://)
-    PRODUCTION_SERVER = '54.89.47.2'     // IP do web-production (sem http://)
+    TESTING_SERVER    = '54.87.136.54'   
+    PRODUCTION_SERVER = '54.89.47.2'    
     TEST_RESULT_FILE  = 'test_result.txt'
   }
 
