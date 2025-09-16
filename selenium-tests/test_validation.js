@@ -1,19 +1,21 @@
-
 const { Builder, By, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 
 (async function testValidation() {
-  const TESTING_URL = 'http:54.87.136.54'; 
-  let options = new chrome.Options()
-    .addArguments('--headless=new', '--no-sandbox', '--disable-dev-shm-usage');
+  const TESTING_URL = 'http://54.87.136.54/'; // IP do web-testing
+  const options = new chrome.Options().addArguments(
+    '--headless=new',
+    '--no-sandbox',
+    '--disable-dev-shm-usage'
+  );
 
-  let driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
+  const driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
   try {
-    await driver.get(54.87.136.54);
+    await driver.get(TESTING_URL);
 
-    await driver.findElement(By.id('name')).sendKeys('Bob');
-    // email empty
-    await driver.findElement(By.id('role')).sendKeys('QA');
+    await driver.findElement(By.id('name')).sendKeys('Danilo');
+    // email vazio de propósito
+    await driver.findElement(By.id('role')).sendKeys('Developer');
 
     await driver.findElement(By.css('button[type="submit"]')).click();
 
