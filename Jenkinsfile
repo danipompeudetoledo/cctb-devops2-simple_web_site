@@ -15,11 +15,15 @@ pipeline {
         sh '''
           node -v
           npm -v
+          # descobrir a major do Chrome instalado (ex.: 140)
+          CHROME_MAJOR=$(google-chrome --version | sed -E 's/.* ([0-9]+)\..*/\\1/')
+          echo "Chrome major: $CHROME_MAJOR"
           rm -f package.json package-lock.json || true
           npm init -y
-          npm install selenium-webdriver chromedriver
-          export PATH="$PATH:./node_modules/.bin"
+          npm install selenium-webdriver chromedriver@${CHROME_MAJOR}
+          export PATH="$PWD/node_modules/.bin:$PATH"
           chromedriver --version || true
+          google-chrome --version || true
         '''
       }
     }
