@@ -41,8 +41,8 @@ pipeline {
                                            usernameVariable: 'SSH_USER')]) {
           sh '''
             ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ec2-user@$TESTING_SERVER \
-              'sudo dnf install -y git && sudo rm -rf /var/www/html/* && \
-               sudo git clone '"$REPO_URL"' /var/www/html'
+    'sudo dnf install -y git && sudo rm -rf /var/www/html && \
+     sudo git clone '"$REPO_URL"' /var/www/html'
           '''
         }
       }
@@ -74,8 +74,8 @@ pipeline {
                                            usernameVariable: 'SSH_USER')]) {
           sh '''
             ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ec2-user@$PRODUCTION_SERVER \
-              'sudo dnf install -y git && sudo rm -rf /var/www/html/* && \
-               sudo git clone '"$REPO_URL"' /var/www/html'
+    'sudo dnf install -y git && sudo rm -rf /var/www/html && \
+     sudo git clone '"$REPO_URL"' /var/www/html'
           '''
         }
       }
