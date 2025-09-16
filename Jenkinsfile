@@ -2,10 +2,10 @@ pipeline {
   agent any
 
   environment {
-    REPO_URL         = 'https://github.com/danipompeudetoledo/cctb-devops2-simple_web_site.git'
-    TESTING_SERVER   = '54.87.136.54'
-    PRODUCTION_SERVER= '54.89.47.2'
-    TEST_RESULT_FILE = 'test_result.txt'
+    REPO_URL          = 'https://github.com/danipompeudetoledo/cctb-devops2-simple_web_site.git'
+    TESTING_SERVER    = '54.87.136.54'   // IP do web-testing (sem http://)
+    PRODUCTION_SERVER = '54.89.47.2'     // IP do web-production (sem http://)
+    TEST_RESULT_FILE  = 'test_result.txt'
   }
 
   stages {
@@ -15,12 +15,18 @@ pipeline {
         sh '''
           node -v
           npm -v
-          # descobrir a major do Chrome instalado (ex.: 140)
-          CHROME_MAJOR=$(google-chrome --version | sed -E 's/.* ([0-9]+)\..*/\\1/')
+
+          # Descobre a versão major do Chrome (ex.: "140")
+          CHROME_MAJOR=$(google-chrome --version | awk '{print $3}' | cut -d. -f1)
           echo "Chrome major: $CHROME_MAJOR"
+
           rm -f package.json package-lock.json || true
           npm init -y
+
+          # Instala selenium-webdriver + chromedriver compatível com o Chrome
           npm install selenium-webdriver chromedriver@${CHROME_MAJOR}
+
+          # Apenas para conferência
           export PATH="$PWD/node_modules/.bin:$PATH"
           chromedriver --version || true
           google-chrome --version || true
@@ -33,11 +39,11 @@ pipeline {
         withCredentials([sshUserPrivateKey(credentialsId: 'ec2-ssh',
                                            keyFileVariable: 'SSH_KEY',
                                            usernameVariable: 'SSH_USER')]) {
-          sh """
-            ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ec2-user@$TESTING_SERVER \\
-              'sudo dnf install -y git && sudo rm -rf /var/www/html/* && \\
-               sudo git clone $REPO_URL /var/www/html'
-          """
+          sh '''
+            ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ec2-user@$TESTING_SERVER \
+              'sudo dnf install -y git && sudo rm -rf /var/www/html/* && \
+               sudo git clone '"$REPO_URL"' /var/www/html'
+          '''
         }
       }
     }
@@ -47,7 +53,7 @@ pipeline {
         script {
           try {
             sh '''
-              export PATH="$PATH:./node_modules/.bin"
+              export PATH="$PWD/node_modules/.bin:$PATH"
               node selenium-tests/test_form.js
               node selenium-tests/test_validation.js
             '''
@@ -66,14 +72,13 @@ pipeline {
         withCredentials([sshUserPrivateKey(credentialsId: 'ec2-ssh',
                                            keyFileVariable: 'SSH_KEY',
                                            usernameVariable: 'SSH_USER')]) {
-          sh """
-            ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ec2-user@$PRODUCTION_SERVER \\
-              'sudo dnf install -y git && sudo rm -rf /var/www/html/* && \\
-               sudo git clone $REPO_URL /var/www/html'
-          """
+          sh '''
+            ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ec2-user@$PRODUCTION_SERVER \
+              'sudo dnf install -y git && sudo rm -rf /var/www/html/* && \
+               sudo git clone '"$REPO_URL"' /var/www/html'
+          '''
         }
       }
     }
   }
 }
-
